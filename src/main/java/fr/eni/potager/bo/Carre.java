@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class Carre {
+public class Carre implements Jardin{
   @Id
   @GeneratedValue
   private Integer id;
@@ -29,4 +29,8 @@ public class Carre {
     this.potager = potager;
   }
 
+  @Override
+  public Double calculateSurface() {
+    return this.getSurface();
+  }
 }

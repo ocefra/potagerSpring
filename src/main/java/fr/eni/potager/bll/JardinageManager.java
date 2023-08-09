@@ -1,14 +1,11 @@
 package fr.eni.potager.bll;
 
-import fr.eni.potager.bo.Carre;
-import fr.eni.potager.bo.Plantation;
-import fr.eni.potager.bo.Plante;
-import fr.eni.potager.bo.Potager;
+import fr.eni.potager.bo.*;
 
 import java.util.List;
 
-public interface JardinageManager {
-  void addPlante(Plante plante) throws JardinageException;
+public interface JardinageManager <T extends Jardin>{
+  void addPlante(Plante... lst) throws JardinageException;
   List<Plante> getAllPlante();
 
   void addPotager(Potager potager);

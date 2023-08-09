@@ -1,54 +1,55 @@
 package fr.eni.potager.bll;
 
-import fr.eni.potager.bo.Carre;
-import fr.eni.potager.bo.Plantation;
-import fr.eni.potager.bo.Plante;
-import fr.eni.potager.bo.Potager;
-import fr.eni.potager.dal.CarreDAO;
-import fr.eni.potager.dal.PlantationDAO;
-import fr.eni.potager.dal.PlanteDAO;
-import fr.eni.potager.dal.PotagerDAO;
+import fr.eni.potager.bo.*;
+import fr.eni.potager.dal.*;
+import fr.eni.potager.utils.PotagerUtilitaire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-public class JardinageManagerImpl implements JardinageManager {
+public class JardinageManagerImpl implements JardinageManager<Jardin> {
   @Autowired
-  PlanteDAO planteDAO;
+  JardinageDAO dao;
   @Autowired
-  PotagerDAO potagerDAO;
-  @Autowired
-  CarreDAO carreDAO;
-  @Autowired
-  PlantationDAO plantationDAO;
+  PotagerUtilitaire util;
 
   @Override
-  public void addPlante(Plante plante) throws JardinageException {
-    try {
-      planteDAO.save(plante);
-    } catch (Exception e) {
-      throw new JardinageException("Impossible d'ajouter la plante : " + e.getMessage());
+  public void addPlante(Plante... lst) throws JardinageException {
+    List<String> listError = new ArrayList<>();
+    for(Plante p:lst) {
+      try {
+        dao.plante.save(p);
+        System.out.println("-------test : "+p.getNom());
+      } catch (Exception e) {
+        listError.add("-----------Impossible d'ajouter la plante : " + p.getNom());
+        System.out.println("-----------Impossible d'ajouter la plante : "+p.getNom());
+      }
+    }
+    if (!listError.isEmpty()) {
+      throw new JardinageException(listError);
     }
   }
 
   @Override
   public List<Plante> getAllPlante() {
-    return (List<Plante>) planteDAO.findAll();
+    return (List<Plante>) dao.plante.findAll();
   }
 
   @Override
   public void addPotager(Potager potager) {
-    potagerDAO.save(potager);
+    dao.potager.save(potager);
   }
 
   @Override
   public List<Potager> getAllPotager() {
-    return (List<Potager>) potagerDAO.findAll();
+    return (List<Potager>) dao.potager.findAll();
   }
 
   @Override
@@ -59,26 +60,27 @@ public class JardinageManagerImpl implements JardinageManager {
     List<Carre> carresDuPotager = getAllCarreOfPotager(carre.getPotager());
 
     Double surfaceCarresExistants = 0.0;
-    for (Carre c : carresDuPotager) {
-      surfaceCarresExistants += c.getSurface();
-    }
+    surfaceCarresExistants = util.calculateSurface(carresDuPotager);
+
     Double surfaceRestante = surfacePotager - surfaceCarresExistants;
 
     if (surfaceRestante >= surfaceCarre) {
-      carreDAO.save(carre);
+      dao.carre.save(carre);
     } else {
-      throw new JardinageException(String.format("Le carré (%.2f cm2) est trop grand : il ne reste plus que %.2f cm2.", surfaceCarre, surfaceRestante));
+      throw new JardinageException(String.format(
+              "Le carré (%.2f m2) est trop grand : il ne reste plus que %.2f m2.",
+              util.squareCmToMeter(surfaceCarre), util.squareCmToMeter(surfaceRestante)));
     }
   }
 
   @Override
   public List<Carre> getAllCarre() {
-    return (List<Carre>) carreDAO.findAll();
+    return (List<Carre>) dao.carre.findAll();
   }
 
   @Override
   public List<Carre> getAllCarreOfPotager(Potager potager) {
-    return carreDAO.findAllCarreOfPotager(potager);
+    return dao.carre.findAllCarreOfPotager(potager);
   }
 
 
@@ -105,19 +107,21 @@ public class JardinageManagerImpl implements JardinageManager {
     Double surfacePlantation = plantation.calculateSurface();
 
     Double surfacePlantsExistants = 0.0;
-    for (Plantation p : plantationsDuCarre) {
-      surfacePlantsExistants += p.calculateSurface();
-    }
+
+    surfacePlantsExistants = util.calculateSurface(plantationsDuCarre);
+
     Double surfaceRestante = surfaceCarre - surfacePlantsExistants;
     if (surfaceRestante >= surfacePlantation) {
-      plantationDAO.save(plantation);
+      dao.plantation.save(plantation);
     } else {
-      throw new JardinageException(String.format("La plantation (%.2f cm2) est trop grande : il ne reste plus que %.2f cm2.", surfacePlantation, surfaceRestante));
+      throw new JardinageException(String.format(
+              "La plantation (%.2f m2) est trop grande : il ne reste plus que %.2f m2.",
+              util.squareCmToMeter(surfacePlantation), util.squareCmToMeter(surfaceRestante)));
     }
   }
 
   @Override
   public List<Plantation> getAllPlantationOfCarre(Carre carre) {
-    return plantationDAO.findAllPlantationOfCarre(carre);
+    return dao.plantation.findAllPlantationOfCarre(carre);
   }
 }
