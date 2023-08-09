@@ -11,7 +11,10 @@ import fr.eni.potager.dal.PotagerDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class JardinageManagerImpl implements JardinageManager {
@@ -25,8 +28,12 @@ public class JardinageManagerImpl implements JardinageManager {
   PlantationDAO plantationDAO;
 
   @Override
-  public void addPlante(Plante plante) {
-    planteDAO.save(plante);
+  public void addPlante(Plante plante) throws JardinageException {
+    try {
+      planteDAO.save(plante);
+    } catch (Exception e) {
+      throw new JardinageException("Impossible d'ajouter la plante : " + e.getMessage());
+    }
   }
 
   @Override
@@ -60,7 +67,7 @@ public class JardinageManagerImpl implements JardinageManager {
     if (surfaceRestante >= surfaceCarre) {
       carreDAO.save(carre);
     } else {
-      throw new JardinageException(String.format("Le carré (%.2f) est trop grand : il ne reste plus que %.2f cm2.", surfaceCarre, surfaceRestante));
+      throw new JardinageException(String.format("Le carré (%.2f cm2) est trop grand : il ne reste plus que %.2f cm2.", surfaceCarre, surfaceRestante));
     }
   }
 
@@ -77,19 +84,35 @@ public class JardinageManagerImpl implements JardinageManager {
 
   @Override
   public void addPlantation(Plantation plantation) throws JardinageException {
+    List<Plantation> plantationsDuCarre = getAllPlantationOfCarre(plantation.getCarre());
+
+    // === Contrainte max 3 plantes ===
+    boolean max3ok = false;
+    Set<Plante> plantesDuCarre = new HashSet<>();
+    for (Plantation p : plantationsDuCarre) {
+      plantesDuCarre.add(p.getPlante());
+    }
+    plantesDuCarre.add(plantation.getPlante());
+    max3ok = plantesDuCarre.size() <= 3;
+
+    if (!max3ok) {
+      throw new JardinageException("Le carré contient déjà 3 espèces différentes");
+    }
+
+    // Si la première contrainte passe
+    // === Contrainte surface ===
     Double surfaceCarre = plantation.getCarre().getSurface();
     Double surfacePlantation = plantation.calculateSurface();
 
-    List<Plantation> plantationsDuCarre = getAllPlantationOfCarre(plantation.getCarre());
     Double surfacePlantsExistants = 0.0;
-    for (Plantation p:plantationsDuCarre) {
+    for (Plantation p : plantationsDuCarre) {
       surfacePlantsExistants += p.calculateSurface();
     }
     Double surfaceRestante = surfaceCarre - surfacePlantsExistants;
     if (surfaceRestante >= surfacePlantation) {
       plantationDAO.save(plantation);
     } else {
-      throw new JardinageException(String.format("La plantation (%.2f) est trop grande : il ne reste plus que %.2f cm2.", surfacePlantation, surfaceRestante));
+      throw new JardinageException(String.format("La plantation (%.2f cm2) est trop grande : il ne reste plus que %.2f cm2.", surfacePlantation, surfaceRestante));
     }
   }
 

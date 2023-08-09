@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PlantationDAO extends CrudRepository<Plantation, Integer> {
-   @Query("SELECT p FROM Plantation p WHERE p.carre=:carre")
-    List<Plantation> findAllPlantationOfCarre(@Param("carre") Carre carre);
+  @Query("SELECT p FROM Plantation p WHERE p.carre=:carre")
+  List<Plantation> findAllPlantationOfCarre(@Param("carre") Carre carre);
 }
-

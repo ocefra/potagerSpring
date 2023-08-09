@@ -8,7 +8,7 @@ import fr.eni.potager.bo.Potager;
 import java.util.List;
 
 public interface JardinageManager {
-  void addPlante(Plante plante);
+  void addPlante(Plante plante) throws JardinageException;
   List<Plante> getAllPlante();
 
   void addPotager(Potager potager);

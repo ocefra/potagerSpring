@@ -1,7 +1,13 @@
 package fr.eni.potager.dal;
 
+import fr.eni.potager.bo.Carre;
 import fr.eni.potager.bo.Plante;
+import fr.eni.potager.bo.Potager;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface PlanteDAO extends CrudRepository<Plante, Integer> {
 }

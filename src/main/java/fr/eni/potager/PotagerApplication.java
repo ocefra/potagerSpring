@@ -26,9 +26,20 @@ public class PotagerApplication implements CommandLineRunner {
     Plante tomateMarmande = new Plante("Marmande", TypePlante.FRUIT, "tomate", 2500., Exposition.SOLEIL);
     Plante carotteVosges = new Plante("Blanche des Vosges", TypePlante.RACINE, "carotte", 900., Exposition.MI_OMBRE);
     Plante pdtNouvelle = new Plante("Nouvelle", TypePlante.RACINE, "pomme de terre", 1500., Exposition.OMBRE);
+    Plante pdtNouvelle2 = new Plante("Ancienne", TypePlante.RACINE, "pomme de terre", 1500., Exposition.SOLEIL);
+    Plante pdtNouvelle3 = new Plante("Nouvelle", TypePlante.RACINE, "pomme de terre", 1500., Exposition.SOLEIL);
 
     manager.addPlante(tomateMarmande);
     manager.addPlante(carotteVosges);
+    manager.addPlante(pdtNouvelle);
+    manager.addPlante(pdtNouvelle2);
+
+    printSeparatorLine("Test ajout doublon plante");
+    try {
+      manager.addPlante(pdtNouvelle3);
+    } catch (JardinageException e) {
+      System.out.println(e.getMessage());
+    }
 
     printSeparatorLine("Test liste de toutes les plantes disponibles");
     manager.getAllPlante().forEach(System.out::println);
@@ -74,10 +85,29 @@ public class PotagerApplication implements CommandLineRunner {
     printSeparatorLine("Test ajout plantation");
     Plantation plantation1 = new Plantation(tomateMarmande,carre3,3, LocalDate.now(),LocalDate.now().plusDays(30));
     Plantation plantation2 = new Plantation(carotteVosges,carre3,2, LocalDate.now(),LocalDate.now().plusDays(50));
+    Plantation plantation3 = new Plantation(carotteVosges,carre3,1, LocalDate.now(),LocalDate.now().plusDays(50));
+    Plantation plantation4 = new Plantation(pdtNouvelle,carre3,2, LocalDate.now(),LocalDate.now().plusDays(50));
+    Plantation plantation6 = new Plantation(pdtNouvelle2,carre3,2, LocalDate.now(),LocalDate.now().plusDays(50));
+
     manager.addPlantation(plantation1);
     manager.addPlantation(plantation2);
+    manager.addPlantation(plantation4);
+    manager.addPlantation(plantation3);
+    try {
+      manager.addPlantation(plantation6);
+    } catch (JardinageException e) {
+      System.out.println("ERREUR : " + e.getMessage());
+    }
 
     manager.getAllPlantationOfCarre(carre3).forEach(System.out::println);
+
+    printSeparatorLine("Test ajout plantation trop grande");
+    Plantation plantation5 = new Plantation(pdtNouvelle, carre3,300, LocalDate.now(),LocalDate.now().plusDays(30));
+    try {
+      manager.addPlantation(plantation5);
+    } catch (JardinageException e) {
+      System.out.println("ERREUR : " + e.getMessage());
+    }
   }
 
   private void printSeparatorLine(String message) {
