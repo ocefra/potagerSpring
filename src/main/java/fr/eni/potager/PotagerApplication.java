@@ -3,6 +3,7 @@ package fr.eni.potager;
 import fr.eni.potager.bll.PotagerManager;
 import fr.eni.potager.bo.Exposition;
 import fr.eni.potager.bo.Plante;
+import fr.eni.potager.bo.Potager;
 import fr.eni.potager.bo.TypePlante;
 import fr.eni.potager.dal.PlanteDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,13 @@ public class PotagerApplication implements CommandLineRunner {
     manager.addPlante(carotteVosges);
 
     manager.getAllPlante().forEach(System.out::println);
+
+    Potager chezOctavia = new Potager("Chez Octavia", "Brécé", "123 rue de Rennes",1.0e6);
+    Potager chezTeck = new Potager("Chez Teck", "Chantepie", "321 rue de St-Malo",9.0e5);
+
+    manager.addPotager(chezOctavia);
+    manager.addPotager(chezTeck);
+
+    manager.getAllPotager().forEach(System.out::println);
   }
 }
