@@ -1,8 +1,11 @@
 package fr.eni.potager.bll;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class JardinageException extends Exception {
   List<String> listError = new ArrayList<>();
 
@@ -13,7 +16,4 @@ public class JardinageException extends Exception {
     this.listError = listError;
   }
 
-  public List<String> getListError() {
-    return listError;
-  }
 }
