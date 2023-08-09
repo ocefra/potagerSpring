@@ -1,9 +1,11 @@
 package fr.eni.potager.bll;
 
 import fr.eni.potager.bo.Carre;
+import fr.eni.potager.bo.Plantation;
 import fr.eni.potager.bo.Plante;
 import fr.eni.potager.bo.Potager;
 import fr.eni.potager.dal.CarreDAO;
+import fr.eni.potager.dal.PlantationDAO;
 import fr.eni.potager.dal.PlanteDAO;
 import fr.eni.potager.dal.PotagerDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +14,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PotagerManagerImpl implements PotagerManager {
+public class JardinageManagerImpl implements JardinageManager {
   @Autowired
   PlanteDAO planteDAO;
   @Autowired
   PotagerDAO potagerDAO;
   @Autowired
   CarreDAO carreDAO;
+  @Autowired
+  PlantationDAO plantationDAO;
 
   @Override
   public void addPlante(Plante plante) {
@@ -41,7 +45,7 @@ public class PotagerManagerImpl implements PotagerManager {
   }
 
   @Override
-  public void addCarre(Carre carre) throws PotagerException {
+  public void addCarre(Carre carre) throws JardinageException {
     Double surfaceCarre = carre.getSurface();
     Double surfacePotager = carre.getPotager().getSurface();
 
@@ -56,7 +60,7 @@ public class PotagerManagerImpl implements PotagerManager {
     if (surfaceRestante >= surfaceCarre) {
       carreDAO.save(carre);
     } else {
-      throw new PotagerException(String.format("Le carré (%.2f) est trop grand : il ne reste plus que %.2f cm2.", surfaceCarre, surfaceRestante));
+      throw new JardinageException(String.format("Le carré (%.2f) est trop grand : il ne reste plus que %.2f cm2.", surfaceCarre, surfaceRestante));
     }
   }
 
@@ -68,5 +72,29 @@ public class PotagerManagerImpl implements PotagerManager {
   @Override
   public List<Carre> getAllCarreOfPotager(Potager potager) {
     return carreDAO.findAllCarreOfPotager(potager);
+  }
+
+
+  @Override
+  public void addPlantation(Plantation plantation) throws JardinageException {
+    Double surfaceCarre = plantation.getCarre().getSurface();
+    Double surfacePlantation = plantation.calculateSurface();
+
+    List<Plantation> plantationsDuCarre = getAllPlantationOfCarre(plantation.getCarre());
+    Double surfacePlantsExistants = 0.0;
+    for (Plantation p:plantationsDuCarre) {
+      surfacePlantsExistants += p.calculateSurface();
+    }
+    Double surfaceRestante = surfaceCarre - surfacePlantsExistants;
+    if (surfaceRestante >= surfacePlantation) {
+      plantationDAO.save(plantation);
+    } else {
+      throw new JardinageException(String.format("La plantation (%.2f) est trop grande : il ne reste plus que %.2f cm2.", surfacePlantation, surfaceRestante));
+    }
+  }
+
+  @Override
+  public List<Plantation> getAllPlantationOfCarre(Carre carre) {
+    return plantationDAO.findAllPlantationOfCarre(carre);
   }
 }

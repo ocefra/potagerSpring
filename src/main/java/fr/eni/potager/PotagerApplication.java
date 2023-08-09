@@ -1,17 +1,19 @@
 package fr.eni.potager;
 
-import fr.eni.potager.bll.PotagerException;
-import fr.eni.potager.bll.PotagerManager;
+import fr.eni.potager.bll.JardinageException;
+import fr.eni.potager.bll.JardinageManager;
 import fr.eni.potager.bo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDate;
+
 @SpringBootApplication
 public class PotagerApplication implements CommandLineRunner {
   @Autowired
-  PotagerManager manager;
+  JardinageManager manager;
 
   public static void main(String[] args) {
     SpringApplication.run(PotagerApplication.class, args);
@@ -23,6 +25,7 @@ public class PotagerApplication implements CommandLineRunner {
     // ========== plantes ============= //
     Plante tomateMarmande = new Plante("Marmande", TypePlante.FRUIT, "tomate", 2500., Exposition.SOLEIL);
     Plante carotteVosges = new Plante("Blanche des Vosges", TypePlante.RACINE, "carotte", 900., Exposition.MI_OMBRE);
+    Plante pdtNouvelle = new Plante("Nouvelle", TypePlante.RACINE, "pomme de terre", 1500., Exposition.OMBRE);
 
     manager.addPlante(tomateMarmande);
     manager.addPlante(carotteVosges);
@@ -64,13 +67,21 @@ public class PotagerApplication implements CommandLineRunner {
     printSeparatorLine("Test ajout carré trop grand");
     try {
       manager.addCarre(carre4);
-    } catch (PotagerException e) {
+    } catch (JardinageException e) {
       System.out.println("ERREUR : " + e.getMessage());
     }
+
+    printSeparatorLine("Test ajout plantation");
+    Plantation plantation1 = new Plantation(tomateMarmande,carre3,3, LocalDate.now(),LocalDate.now().plusDays(30));
+    Plantation plantation2 = new Plantation(carotteVosges,carre3,2, LocalDate.now(),LocalDate.now().plusDays(50));
+    manager.addPlantation(plantation1);
+    manager.addPlantation(plantation2);
+
+    manager.getAllPlantationOfCarre(carre3).forEach(System.out::println);
   }
 
   private void printSeparatorLine(String message) {
     String separatorSequence = "===========";
-    System.out.printf("%n%s %s %s", separatorSequence, message, separatorSequence);
+    System.out.printf("%n%s %s %s%n", separatorSequence, message, separatorSequence);
   }
 }

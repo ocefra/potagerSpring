@@ -28,4 +28,5 @@ public class Carre {
     this.exposition = exposition;
     this.potager = potager;
   }
+
 }
