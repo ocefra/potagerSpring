@@ -78,6 +78,11 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
   }
 
   @Override
+  public List<Plantation> getAllPlantation() {
+    return (List<Plantation>) dao.plantation.findAll();
+  }
+
+  @Override
   public List<Carre> getAllCarreOfPotager(Potager potager) {
     return dao.carre.findAllCarreOfPotager(potager);
   }
@@ -146,15 +151,13 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
   public void locatePlante(Plante plante) {
     StringBuilder sb = new StringBuilder();
     sb.append(plante.getVariete() +" "+ plante.getNom());
-    for(Potager pot : getAllPotager()) {
-      for (Carre carre: getAllCarreOfPotager(pot)) {
-        for (Plantation plantation: getAllPlantationOfCarre(carre)) {
+
+        for (Plantation plantation: getAllPlantation()) {
           if (plante.equals(plantation.getPlante())) {
-            sb.append(String.format("\n- Potager : %s | Carré : %s | Quantité : %d", pot.getNom(), carre.getNom(), plantation.getQuantite()));
+            sb.append(String.format("\n- Potager : %s | Carré : %s | Quantité : %d", plantation.getCarre().getPotager().getNom(), plantation.getCarre().getNom(), plantation.getQuantite()));
           }
         }
-      }
-    }
+
     System.out.println(sb);
   }
 

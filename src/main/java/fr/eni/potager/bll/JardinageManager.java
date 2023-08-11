@@ -13,6 +13,7 @@ public interface JardinageManager <T extends Jardinable>{
 
   void addCarre(Carre carre) throws JardinageException;
   List<Carre> getAllCarre();
+  List<Plantation> getAllPlantation();
   List<Carre> getAllCarreOfPotager(Potager potager);
 
   void addPlantation(Plantation plantation) throws JardinageException;
@@ -22,5 +23,6 @@ public interface JardinageManager <T extends Jardinable>{
   void removePlantationFromCarre(Plante plante, Carre carre);
 
   void visualizePotager(Potager chezOctavia);
+
   void locatePlante(Plante plante);
 }
