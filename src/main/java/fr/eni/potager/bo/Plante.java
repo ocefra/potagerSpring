@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "nom", "variete" }) })
-public class Plante {
+public class Plante implements Jardin{
   @Id
   @GeneratedValue
   private Integer id;
@@ -25,5 +25,10 @@ public class Plante {
     this.variete = variete;
     this.surface = surface;
     this.exposition = exposition;
+  }
+
+  @Override
+  public Double calculateSurface() {
+    return this.getSurface();
   }
 }

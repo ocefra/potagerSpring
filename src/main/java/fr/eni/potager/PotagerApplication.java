@@ -3,6 +3,7 @@ package fr.eni.potager;
 import fr.eni.potager.bll.JardinageException;
 import fr.eni.potager.bll.JardinageManager;
 import fr.eni.potager.bo.*;
+import fr.eni.potager.utils.PotagerUtilitaire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 public class PotagerApplication implements CommandLineRunner {
   @Autowired
   JardinageManager manager;
+
 
   public static void main(String[] args) {
     SpringApplication.run(PotagerApplication.class, args);
@@ -28,17 +30,14 @@ public class PotagerApplication implements CommandLineRunner {
     Plante pdtNouvelle = new Plante("Nouvelle", TypePlante.RACINE, "pomme de terre", 1500., Exposition.OMBRE);
     Plante pdtNouvelle2 = new Plante("Ancienne", TypePlante.RACINE, "pomme de terre", 1500., Exposition.SOLEIL);
     Plante pdtNouvelle3 = new Plante("Nouvelle", TypePlante.RACINE, "pomme de terre", 1500., Exposition.SOLEIL);
+    Plante tomateMarmande2 = new Plante("Marmande", TypePlante.FRUIT, "tomate", 2500., Exposition.MI_OMBRE);
 
-    manager.addPlante(tomateMarmande);
-    manager.addPlante(carotteVosges);
-    manager.addPlante(pdtNouvelle);
-    manager.addPlante(pdtNouvelle2);
 
     printSeparatorLine("Test ajout doublon plante");
     try {
-      manager.addPlante(pdtNouvelle3);
+      manager.addPlante(tomateMarmande, carotteVosges, tomateMarmande2, tomateMarmande, pdtNouvelle, pdtNouvelle3, pdtNouvelle2, tomateMarmande);
     } catch (JardinageException e) {
-      System.out.println(e.getMessage());
+      System.out.println(e.getListError());
     }
 
     printSeparatorLine("Test liste de toutes les plantes disponibles");

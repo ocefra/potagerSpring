@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @NoArgsConstructor
-public class Plantation {
+public class Plantation implements Jardin{
     @Id
     @GeneratedValue
     private Integer id;
