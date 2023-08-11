@@ -38,4 +38,8 @@ public class Plantation implements Jardinable {
     public Double calculateSurface() {
         return this.quantite * this.plante.calculateSurface();
     }
+
+    public String synthesePlantation() {
+        return String.format("%n - %d plant(s) de %s",this.quantite, this.plante.getNom());
+    }
 }

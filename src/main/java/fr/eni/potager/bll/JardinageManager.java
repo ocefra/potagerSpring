@@ -21,4 +21,5 @@ public interface JardinageManager <T extends Jardinable>{
 
   void removePlantationFromCarre(Plante plante, Carre carre);
 
+  void visualizePotager(Potager chezOctavia);
 }

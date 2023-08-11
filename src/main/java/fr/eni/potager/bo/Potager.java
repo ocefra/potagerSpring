@@ -25,4 +25,5 @@ public class Potager {
         this.adresse = adresse;
         this.surface = surface;
     }
+
 }

@@ -129,4 +129,18 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
   public void removePlantationFromCarre(Plante plante, Carre carre) {
     dao.plantation.deleteByPlanteAndCarre(plante, carre);
   }
+
+  public void visualizePotager(Potager potager) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(String.format("\n====== Potager : %s =======", potager.getNom()));
+
+    for(Carre c:dao.carre.findAllCarreOfPotager(potager)) {
+      sb.append("\nCarré contenant :");
+      for(Plantation p: dao.plantation.findAllPlantationOfCarre(c)){
+        sb.append(p.synthesePlantation());
+      }
+    }
+    System.out.println(sb.toString());
+  }
+
 }

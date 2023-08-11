@@ -30,12 +30,12 @@ public class PotagerApplication implements CommandLineRunner {
     Plante pdtNouvelle = new Plante("Nouvelle", TypePlante.RACINE, "pomme de terre", 1500., Exposition.OMBRE);
     Plante pdtNouvelle2 = new Plante("Ancienne", TypePlante.RACINE, "pomme de terre", 1500., Exposition.SOLEIL);
     Plante pdtNouvelle3 = new Plante("Nouvelle", TypePlante.RACINE, "pomme de terre", 1500., Exposition.SOLEIL);
-    Plante tomateMarmande2 = new Plante("Marmande", TypePlante.FRUIT, "tomate", 2500., Exposition.MI_OMBRE);
+    Plante tomateCerise = new Plante("Cerise", TypePlante.FRUIT, "tomate", 500., Exposition.MI_OMBRE);
 
 
     printSeparatorLine("Test ajout doublon plante");
     try {
-      manager.addPlante(tomateMarmande, carotteVosges, tomateMarmande2, tomateMarmande, pdtNouvelle, pdtNouvelle3, pdtNouvelle2, tomateMarmande);
+      manager.addPlante(tomateMarmande, carotteVosges, tomateCerise, tomateMarmande, pdtNouvelle, pdtNouvelle3, pdtNouvelle2, tomateMarmande);
     } catch (JardinageException e) {
       System.out.println(e.getListError());
     }
@@ -60,7 +60,7 @@ public class PotagerApplication implements CommandLineRunner {
     carre1.setExposition(Exposition.MI_OMBRE);
     carre1.setSurface(3.0e5);
 
-    Carre carre2 = new Carre(3.0e5, Sol.HUMIFERE, Exposition.SOLEIL, chezOctavia);
+    Carre carre2 = new Carre(8.0e5, Sol.HUMIFERE, Exposition.SOLEIL, chezOctavia);
     Carre carre3 = new Carre(2.0e5, Sol.LIMONEUX, Exposition.OMBRE, chezOctavia);
     Carre carre4 = new Carre(10.5e5, Sol.ARGILEUX, Exposition.MI_OMBRE, chezOctavia);
 
@@ -87,16 +87,15 @@ public class PotagerApplication implements CommandLineRunner {
     Plantation plantation3 = new Plantation(carotteVosges,carre3,1, LocalDate.now(),LocalDate.now().plusDays(50));
     Plantation plantation4 = new Plantation(pdtNouvelle,carre3,2, LocalDate.now(),LocalDate.now().plusDays(50));
     Plantation plantation6 = new Plantation(pdtNouvelle2,carre3,2, LocalDate.now(),LocalDate.now().plusDays(50));
+    Plantation plantation7 = new Plantation(tomateCerise,carre2,1, LocalDate.now(),LocalDate.now().plusDays(50));
+
+
 
     manager.addPlantation(plantation1);
     manager.addPlantation(plantation2);
     manager.addPlantation(plantation4);
     manager.addPlantation(plantation3);
-    try {
-      manager.addPlantation(plantation6);
-    } catch (JardinageException e) {
-      System.out.println("ERREUR : " + e.getMessage());
-    }
+    manager.addPlantation(plantation7);
 
     manager.getAllPlantationOfCarre(carre3).forEach(System.out::println);
 
@@ -108,11 +107,20 @@ public class PotagerApplication implements CommandLineRunner {
       System.out.println("ERREUR : " + e.getMessage());
     }
 
+
+    printSeparatorLine("Test visualisation potager");
+    manager.visualizePotager(chezOctavia);
+    manager.visualizePotager(chezTeck);
+
     printSeparatorLine("Test suppression de toutes les plantations d'une même plante dans un carré");
     manager.removePlantationFromCarre(carotteVosges, carre3);
     System.out.println("Plantations restantes après la suppression :");
     manager.getAllPlantationOfCarre(carre3).forEach(System.out::println);
+
+
   }
+
+
 
   private void printSeparatorLine(String message) {
     String separatorSequence = "===========";
