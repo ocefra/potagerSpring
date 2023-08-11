@@ -125,6 +125,20 @@ public class PotagerApplication implements CommandLineRunner {
     printSeparatorLine("Test localisation plante");
     manager.locatePlante(carotteVosges);
 
+    // ============= ACTION ================ //
+    Action a1 = new Action("récolter tomates", carre1, LocalDate.now().plusDays(10));
+    Action a2 = new Action("désherber", chezTeck, LocalDate.now().plusDays(20));
+    Action a3 = new Action("élaguer", chezOctavia, LocalDate.now().plusDays(-20));
+
+    printSeparatorLine("Test ajout actions");
+    manager.addAction(a1);
+    manager.addAction(a2);
+    try {
+      manager.addAction(a3);
+    } catch (JardinageException e) {
+      System.out.println("ERREUR : " + e.getMessage());
+    }
+
   }
 
 

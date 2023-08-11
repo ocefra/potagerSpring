@@ -7,22 +7,21 @@ import java.util.List;
 public interface JardinageManager <T extends Jardinable>{
   void addPlante(Plante... lst) throws JardinageException;
   List<Plante> getAllPlante();
+  void locatePlante(Plante plante);
 
   void addPotager(Potager potager);
   List<Potager> getAllPotager();
+  void visualizePotager(Potager chezOctavia);
 
   void addCarre(Carre carre) throws JardinageException;
   List<Carre> getAllCarre();
-  List<Plantation> getAllPlantation();
   List<Carre> getAllCarreOfPotager(Potager potager);
 
   void addPlantation(Plantation plantation) throws JardinageException;
-
+  List<Plantation> getAllPlantation();
   List<Plantation> getAllPlantationOfCarre(Carre carre);
-
   void removePlantationFromCarre(Plante plante, Carre carre);
 
-  void visualizePotager(Potager chezOctavia);
-
-  void locatePlante(Plante plante);
+  void addAction(Action action) throws JardinageException;
+//  List<Action> getActionNextWeeks(Integer numWeeks);
 }

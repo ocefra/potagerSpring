@@ -13,5 +13,7 @@ public class JardinageDAO {
     public CarreDAO carre;
     @Autowired
     public PlantationDAO plantation;
+    @Autowired
+    public ActionDAO action;
 
 }

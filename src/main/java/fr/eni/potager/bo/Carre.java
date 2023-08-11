@@ -10,13 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class Carre implements Jardinable {
-  @Id
-  @GeneratedValue
-  private Integer id;
-
-  private String nom;
-  private Double surface;
+public class Carre extends Actionable implements Jardinable {
   private Sol sol;
   private Exposition exposition;
 
@@ -24,8 +18,7 @@ public class Carre implements Jardinable {
   private Potager potager;
 
   public Carre(String nom, Double surface, Sol sol, Exposition exposition, Potager potager) {
-    this.nom = nom;
-    this.surface = surface;
+    super(nom, surface);
     this.sol = sol;
     this.exposition = exposition;
     this.potager = potager;
@@ -35,6 +28,5 @@ public class Carre implements Jardinable {
   public Double calculateSurface() {
     return this.getSurface();
   }
-
 
 }

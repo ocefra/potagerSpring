@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +20,7 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
   @Autowired
   PotagerUtilitaire util;
 
+  // ========= PLANTE ============ //
   @Override
   public void addPlante(Plante... lst) throws JardinageException {
     List<String> listError = new ArrayList<>();
@@ -40,7 +42,10 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
   public List<Plante> getAllPlante() {
     return (List<Plante>) dao.plante.findAll();
   }
+  // ========= fin PLANTE ============ //
 
+
+  // ========= POTAGER ============ //
   @Override
   public void addPotager(Potager potager) {
     dao.potager.save(potager);
@@ -49,6 +54,19 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
   @Override
   public List<Potager> getAllPotager() {
     return (List<Potager>) dao.potager.findAll();
+  }
+
+  public void visualizePotager(Potager potager) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(String.format("\n====== Potager : %s =======", potager.getNom()));
+
+    for(Carre c:dao.carre.findAllCarreOfPotager(potager)) {
+      sb.append("\nCarré "+c.getNom() +" contenant :");
+      for(Plantation p: dao.plantation.findAllPlantationOfCarre(c)){
+        sb.append(p.synthesePlantation());
+      }
+    }
+    System.out.println(sb);
   }
 
   @Override
@@ -135,18 +153,19 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
     dao.plantation.deleteByPlanteAndCarre(plante, carre);
   }
 
-  public void visualizePotager(Potager potager) {
-    StringBuilder sb = new StringBuilder();
-    sb.append(String.format("\n====== Potager : %s =======", potager.getNom()));
-
-    for(Carre c:dao.carre.findAllCarreOfPotager(potager)) {
-      sb.append("\nCarré "+c.getNom() +" contenant :");
-      for(Plantation p: dao.plantation.findAllPlantationOfCarre(c)){
-        sb.append(p.synthesePlantation());
-      }
+  @Override
+  public void addAction(Action action) throws JardinageException {
+    if (action.getDate().isAfter(LocalDate.now())) {
+      dao.action.save(action);
+    } else {
+      throw new JardinageException("Impossible d'ajouter l'action : la date de l'action doit être postérieure à la date d'aujourd'hui.");
     }
-    System.out.println(sb);
   }
+
+//  @Override
+//  public List<Action> getActionNextWeeks(Integer numWeeks) {
+//    return dao.action.findNextWeeks(numWeeks);
+//  }
 
   public void locatePlante(Plante plante) {
     StringBuilder sb = new StringBuilder();

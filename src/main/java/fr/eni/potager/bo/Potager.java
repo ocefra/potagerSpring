@@ -9,21 +9,18 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class Potager {
-    @Id
-    @GeneratedValue
-    private Integer id;
-
-    private String nom;
+public class Potager extends Actionable implements Jardinable {
     private String ville;
     private String adresse;
-    private Double surface;
 
     public Potager(String nom, String ville, String adresse, Double surface) {
-        this.nom = nom;
+        super(nom, surface);
         this.ville = ville;
         this.adresse = adresse;
-        this.surface = surface;
     }
 
+    @Override
+    public Double calculateSurface() {
+        return getSurface();
+    }
 }
