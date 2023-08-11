@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "nom", "variete" }) })
-public class Plante implements Jardin{
+public class Plante implements Jardinable {
   @Id
   @GeneratedValue
   private Integer id;

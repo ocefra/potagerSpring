@@ -107,6 +107,11 @@ public class PotagerApplication implements CommandLineRunner {
     } catch (JardinageException e) {
       System.out.println("ERREUR : " + e.getMessage());
     }
+
+    printSeparatorLine("Test suppression de toutes les plantations d'une même plante dans un carré");
+    manager.removePlantationFromCarre(carotteVosges, carre3);
+    System.out.println("Plantations restantes après la suppression :");
+    manager.getAllPlantationOfCarre(carre3).forEach(System.out::println);
   }
 
   private void printSeparatorLine(String message) {

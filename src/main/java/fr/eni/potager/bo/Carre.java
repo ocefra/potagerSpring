@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class Carre implements Jardin{
+public class Carre implements Jardinable {
   @Id
   @GeneratedValue
   private Integer id;

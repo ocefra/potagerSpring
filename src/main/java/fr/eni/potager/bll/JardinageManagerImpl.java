@@ -5,16 +5,15 @@ import fr.eni.potager.dal.*;
 import fr.eni.potager.utils.PotagerUtilitaire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
-public class JardinageManagerImpl implements JardinageManager<Jardin> {
+public class JardinageManagerImpl implements JardinageManager<Jardinable> {
   @Autowired
   JardinageDAO dao;
   @Autowired
@@ -123,5 +122,11 @@ public class JardinageManagerImpl implements JardinageManager<Jardin> {
   @Override
   public List<Plantation> getAllPlantationOfCarre(Carre carre) {
     return dao.plantation.findAllPlantationOfCarre(carre);
+  }
+
+  @Transactional
+  @Override
+  public void removePlantationFromCarre(Plante plante, Carre carre) {
+    dao.plantation.deleteByPlanteAndCarre(plante, carre);
   }
 }

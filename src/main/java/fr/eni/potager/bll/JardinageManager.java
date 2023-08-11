@@ -4,7 +4,7 @@ import fr.eni.potager.bo.*;
 
 import java.util.List;
 
-public interface JardinageManager <T extends Jardin>{
+public interface JardinageManager <T extends Jardinable>{
   void addPlante(Plante... lst) throws JardinageException;
   List<Plante> getAllPlante();
 
@@ -18,5 +18,7 @@ public interface JardinageManager <T extends Jardin>{
   void addPlantation(Plantation plantation) throws JardinageException;
 
   List<Plantation> getAllPlantationOfCarre(Carre carre);
+
+  void removePlantationFromCarre(Plante plante, Carre carre);
 
 }

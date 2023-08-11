@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @NoArgsConstructor
-public class Plantation implements Jardin{
+public class Plantation implements Jardinable {
     @Id
     @GeneratedValue
     private Integer id;
@@ -36,6 +36,6 @@ public class Plantation implements Jardin{
     }
 
     public Double calculateSurface() {
-        return this.quantite * this.plante.getSurface();
+        return this.quantite * this.plante.calculateSurface();
     }
 }
