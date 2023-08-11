@@ -135,12 +135,27 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
     sb.append(String.format("\n====== Potager : %s =======", potager.getNom()));
 
     for(Carre c:dao.carre.findAllCarreOfPotager(potager)) {
-      sb.append("\nCarré contenant :");
+      sb.append("\nCarré "+c.getNom() +" contenant :");
       for(Plantation p: dao.plantation.findAllPlantationOfCarre(c)){
         sb.append(p.synthesePlantation());
       }
     }
-    System.out.println(sb.toString());
+    System.out.println(sb);
+  }
+
+  public void locatePlante(Plante plante) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(plante.getVariete() +" "+ plante.getNom());
+    for(Potager pot : getAllPotager()) {
+      for (Carre carre: getAllCarreOfPotager(pot)) {
+        for (Plantation plantation: getAllPlantationOfCarre(carre)) {
+          if (plante.equals(plantation.getPlante())) {
+            sb.append(String.format("\n- Potager : %s | Carré : %s | Quantité : %d", pot.getNom(), carre.getNom(), plantation.getQuantite()));
+          }
+        }
+      }
+    }
+    System.out.println(sb);
   }
 
 }

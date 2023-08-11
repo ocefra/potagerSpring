@@ -55,14 +55,15 @@ public class PotagerApplication implements CommandLineRunner {
 
     // ========== carrés ============= //
     Carre carre1 = new Carre();
+    carre1.setNom("A");
     carre1.setPotager(chezTeck);
     carre1.setSol(Sol.SABLEUX);
     carre1.setExposition(Exposition.MI_OMBRE);
     carre1.setSurface(3.0e5);
 
-    Carre carre2 = new Carre(8.0e5, Sol.HUMIFERE, Exposition.SOLEIL, chezOctavia);
-    Carre carre3 = new Carre(2.0e5, Sol.LIMONEUX, Exposition.OMBRE, chezOctavia);
-    Carre carre4 = new Carre(10.5e5, Sol.ARGILEUX, Exposition.MI_OMBRE, chezOctavia);
+    Carre carre2 = new Carre("A", 8.0e5, Sol.HUMIFERE, Exposition.SOLEIL, chezOctavia);
+    Carre carre3 = new Carre("B",2.0e5, Sol.LIMONEUX, Exposition.OMBRE, chezOctavia);
+    Carre carre4 = new Carre("D", 10.5e5, Sol.ARGILEUX, Exposition.MI_OMBRE, chezOctavia);
 
     manager.addCarre(carre1);
     manager.addCarre(carre2);
@@ -88,7 +89,8 @@ public class PotagerApplication implements CommandLineRunner {
     Plantation plantation4 = new Plantation(pdtNouvelle,carre3,2, LocalDate.now(),LocalDate.now().plusDays(50));
     Plantation plantation6 = new Plantation(pdtNouvelle2,carre3,2, LocalDate.now(),LocalDate.now().plusDays(50));
     Plantation plantation7 = new Plantation(tomateCerise,carre2,1, LocalDate.now(),LocalDate.now().plusDays(50));
-
+    Plantation carottePotagerTeck = new Plantation(carotteVosges,carre1,2, LocalDate.now(),LocalDate.now().plusDays(50));
+    Plantation pdtPotagerTeck = new Plantation(pdtNouvelle,carre1,5, LocalDate.now(),LocalDate.now().plusDays(50));
 
 
     manager.addPlantation(plantation1);
@@ -96,6 +98,9 @@ public class PotagerApplication implements CommandLineRunner {
     manager.addPlantation(plantation4);
     manager.addPlantation(plantation3);
     manager.addPlantation(plantation7);
+    manager.addPlantation(carottePotagerTeck);
+    manager.addPlantation(pdtPotagerTeck);
+
 
     manager.getAllPlantationOfCarre(carre3).forEach(System.out::println);
 
@@ -112,11 +117,13 @@ public class PotagerApplication implements CommandLineRunner {
     manager.visualizePotager(chezOctavia);
     manager.visualizePotager(chezTeck);
 
-    printSeparatorLine("Test suppression de toutes les plantations d'une même plante dans un carré");
-    manager.removePlantationFromCarre(carotteVosges, carre3);
-    System.out.println("Plantations restantes après la suppression :");
-    manager.getAllPlantationOfCarre(carre3).forEach(System.out::println);
+//    printSeparatorLine("Test suppression de toutes les plantations d'une même plante dans un carré");
+//    manager.removePlantationFromCarre(carotteVosges, carre3);
+//    System.out.println("Plantations restantes après la suppression :");
+//    manager.getAllPlantationOfCarre(carre3).forEach(System.out::println);
 
+    printSeparatorLine("Test localisation plante");
+    manager.locatePlante(carotteVosges);
 
   }
 

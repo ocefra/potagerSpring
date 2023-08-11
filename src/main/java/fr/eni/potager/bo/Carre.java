@@ -15,6 +15,7 @@ public class Carre implements Jardinable {
   @GeneratedValue
   private Integer id;
 
+  private String nom;
   private Double surface;
   private Sol sol;
   private Exposition exposition;
@@ -22,7 +23,8 @@ public class Carre implements Jardinable {
   @ManyToOne
   private Potager potager;
 
-  public Carre(Double surface, Sol sol, Exposition exposition, Potager potager) {
+  public Carre(String nom, Double surface, Sol sol, Exposition exposition, Potager potager) {
+    this.nom = nom;
     this.surface = surface;
     this.sol = sol;
     this.exposition = exposition;

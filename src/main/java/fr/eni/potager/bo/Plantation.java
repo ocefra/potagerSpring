@@ -40,6 +40,6 @@ public class Plantation implements Jardinable {
     }
 
     public String synthesePlantation() {
-        return String.format("%n - %d plant(s) de %s",this.quantite, this.plante.getNom());
+        return String.format("%n - %d plant(s) de %s %s",this.quantite, this.plante.getVariete(),this.plante.getNom());
     }
 }

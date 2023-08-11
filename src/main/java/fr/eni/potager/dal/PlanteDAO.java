@@ -10,4 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PlanteDAO extends CrudRepository<Plante, Integer> {
+
+
+
 }
