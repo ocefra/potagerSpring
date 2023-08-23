@@ -139,6 +139,8 @@ public class PotagerApplication implements CommandLineRunner {
       System.out.println("ERREUR : " + e.getMessage());
     }
 
+    printSeparatorLine("Test récupération actions futures");
+    manager.getActionNextWeeks(3).forEach(System.out::println);
   }
 
 

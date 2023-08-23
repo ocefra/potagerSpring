@@ -23,5 +23,5 @@ public interface JardinageManager <T extends Jardinable>{
   void removePlantationFromCarre(Plante plante, Carre carre);
 
   void addAction(Action action) throws JardinageException;
-//  List<Action> getActionNextWeeks(Integer numWeeks);
+  List<Action> getActionNextWeeks(Integer nWeeks);
 }

@@ -61,7 +61,7 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
     sb.append(String.format("\n====== Potager : %s =======", potager.getNom()));
 
     for(Carre c:dao.carre.findAllCarreOfPotager(potager)) {
-      sb.append("\nCarré "+c.getNom() +" contenant :");
+      sb.append("\nCarré ").append(c.getNom()).append(" contenant :");
       for(Plantation p: dao.plantation.findAllPlantationOfCarre(c)){
         sb.append(p.synthesePlantation());
       }
@@ -162,10 +162,14 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
     }
   }
 
-//  @Override
-//  public List<Action> getActionNextWeeks(Integer numWeeks) {
-//    return dao.action.findNextWeeks(numWeeks);
-//  }
+  @Override
+  public List<Action> getActionNextWeeks(Integer nWeeks) {
+    List<Action> actions = (List<Action>) dao.action.findAll();
+    return actions
+        .stream()
+        .filter(a -> a.getDate().isAfter(LocalDate.now()) && a.getDate().isBefore(LocalDate.now().plusWeeks(nWeeks)))
+        .toList();
+  }
 
   public void locatePlante(Plante plante) {
     StringBuilder sb = new StringBuilder();
