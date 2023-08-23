@@ -56,18 +56,21 @@ public class PotagerApplication implements CommandLineRunner {
     // ========== carrés ============= //
     Carre carre1 = new Carre();
     carre1.setNom("A");
-    carre1.setPotager(chezTeck);
     carre1.setSol(Sol.SABLEUX);
     carre1.setExposition(Exposition.MI_OMBRE);
     carre1.setSurface(3.0e5);
+    manager.addCarreToPotager(carre1, chezTeck);
 
-    Carre carre2 = new Carre("A", 8.0e5, Sol.HUMIFERE, Exposition.SOLEIL, chezOctavia);
-    Carre carre3 = new Carre("B",2.0e5, Sol.LIMONEUX, Exposition.OMBRE, chezOctavia);
-    Carre carre4 = new Carre("D", 10.5e5, Sol.ARGILEUX, Exposition.MI_OMBRE, chezOctavia);
+//    Carre carre2 = new Carre("A", 8.0e5, Sol.HUMIFERE, Exposition.SOLEIL, chezOctavia);
+    Carre carre2 = new Carre("A", 8.0e5, Sol.HUMIFERE, Exposition.SOLEIL);
+    manager.addCarreToPotager(carre2, chezOctavia);
+//    Carre carre3 = new Carre("B",2.0e5, Sol.LIMONEUX, Exposition.OMBRE, chezOctavia);
+    Carre carre3 = new Carre("B",2.0e5, Sol.LIMONEUX, Exposition.OMBRE);
+    manager.addCarreToPotager(carre3, chezOctavia);
 
-    manager.addCarre(carre1);
-    manager.addCarre(carre2);
-    manager.addCarre(carre3);
+//    manager.addCarre(carre1);
+//    manager.addCarre(carre2);
+//    manager.addCarre(carre3);
 
 
     printSeparatorLine("Test liste de tous les carrés");
@@ -77,8 +80,10 @@ public class PotagerApplication implements CommandLineRunner {
     manager.getAllCarreOfPotager(chezOctavia).forEach(System.out::println);
 
     printSeparatorLine("Test ajout carré trop grand");
+//    Carre carre4 = new Carre("D", 10.5e5, Sol.ARGILEUX, Exposition.MI_OMBRE, chezOctavia);
+    Carre carre4 = new Carre("D", 10.5e5, Sol.ARGILEUX, Exposition.MI_OMBRE);
     try {
-      manager.addCarre(carre4);
+      manager.addCarreToPotager(carre4, chezOctavia);
     } catch (JardinageException e) {
       System.out.println("ERREUR : " + e.getMessage());
     }
@@ -92,7 +97,7 @@ public class PotagerApplication implements CommandLineRunner {
     manager.addPlantationToCarre(plantation3,carre3);
     Plantation plantation4 = new Plantation(pdtNouvelle,2, LocalDate.now(),LocalDate.now().plusDays(50));
     manager.addPlantationToCarre(plantation4,carre3);
-//    Plantation plantation6 = new Plantation(pdtNouvelle2,carre3,2, LocalDate.now(),LocalDate.now().plusDays(50));
+//    Plantation plantation6 = new Plantation(pdtNouvelle2, 2, LocalDate.now(),LocalDate.now().plusDays(50));
 //    manager.addPlantationToCarre(plantation6,carre3);
     Plantation plantation7 = new Plantation(tomateCerise,1, LocalDate.now(),LocalDate.now().plusDays(50));
     manager.addPlantationToCarre(plantation7,carre2);
@@ -123,8 +128,8 @@ public class PotagerApplication implements CommandLineRunner {
 //    System.out.println("Plantations restantes après la suppression :");
 //    manager.getAllPlantationOfCarre(carre3).forEach(System.out::println);
 
-//    printSeparatorLine("Test liste de tous les carrés");
-//    manager.getAllCarre().forEach(System.out::println);
+    printSeparatorLine("Test liste de tous les carrés");
+    manager.getAllCarre().forEach(System.out::println);
 
     printSeparatorLine("Test localisation plante");
     manager.locatePlante(carotteVosges);

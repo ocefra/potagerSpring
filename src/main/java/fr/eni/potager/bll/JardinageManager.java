@@ -13,7 +13,7 @@ public interface JardinageManager <T extends Jardinable>{
   List<Potager> getAllPotager();
   void visualizePotager(Potager chezOctavia);
 
-  void addCarre(Carre carre) throws JardinageException;
+//  void addCarre(Carre carre) throws JardinageException;
   List<Carre> getAllCarre();
   List<Carre> getAllCarreOfPotager(Potager potager);
 
@@ -26,4 +26,6 @@ public interface JardinageManager <T extends Jardinable>{
   List<Action> getActionNextWeeks(Integer nWeeks);
 
   void addPlantationToCarre(Plantation plantation, Carre carre) throws JardinageException;
+
+  void addCarreToPotager(Carre carre, Potager potager) throws JardinageException;
 }

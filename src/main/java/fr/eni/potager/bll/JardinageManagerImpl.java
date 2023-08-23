@@ -70,11 +70,12 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
   }
 
   @Override
-  public void addCarre(Carre carre) throws JardinageException {
+  @Transactional
+  public void addCarreToPotager(Carre carre, Potager potager) throws JardinageException {
     Double surfaceCarre = carre.getSurface();
-    Double surfacePotager = carre.getPotager().getSurface();
+    Double surfacePotager = potager.getSurface();
 
-    List<Carre> carresDuPotager = getAllCarreOfPotager(carre.getPotager());
+    List<Carre> carresDuPotager = getAllCarreOfPotager(potager);
 
     Double surfaceCarresExistants = 0.0;
     surfaceCarresExistants = util.calculateSurface(carresDuPotager);
@@ -82,7 +83,10 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
     Double surfaceRestante = surfacePotager - surfaceCarresExistants;
 
     if (surfaceRestante >= surfaceCarre) {
+      potager.add(carre);
+      carre.setPotager(potager);
       dao.carre.save(carre);
+      dao.potager.save(potager);
     } else {
       throw new JardinageException(String.format(
               "Le carré (%.2f m2) est trop grand : il ne reste plus que %.2f m2.",
@@ -105,14 +109,6 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
     return dao.carre.findAllCarreOfPotager(potager);
   }
 
-//  @Override
-//  @Transactional
-//  public void addPlantationToCarre(Plantation plantation, Carre carre) {
-//    carre.add(plantation);
-//    plantation.setCarre(carre);
-//    dao.plantation.save(plantation);
-//    dao.carre.save(carre);
-//  }
   @Override
   @Transactional
   public void addPlantationToCarre(Plantation plantation, Carre carre) throws JardinageException {

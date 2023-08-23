@@ -16,22 +16,25 @@ import java.util.List;
 @RestController
 @RequestMapping("/jardinage")
 public class PotagerWS {
-    @Autowired
-    JardinageManager manager;
+  @Autowired
+  JardinageManager manager;
 
 
-   @GetMapping()
-    public List<Jardinable> getAllPotager() {
-       List<Jardinable> lst = new ArrayList<>();
-       lst.addAll(manager.getAllPotager());
-       lst.addAll(manager.getAllPlantation());
-        return lst;
-   }
+//  @GetMapping()
+//  public List<Jardinable> getAllPotager() {
+//    List<Jardinable> lst = new ArrayList<>();
+//    lst.addAll(manager.getAllPotager());
+//    lst.addAll(manager.getAllPlantation());
+//    return lst;
+//  }
 
-    @GetMapping("/carre")
-    public List<Carre> getAllCarre() {
-       return manager.getAllCarre();
-    }
+  @GetMapping("/carre")
+  public List<Carre> getAllCarre() {
+    return manager.getAllCarre();
+  }
 
-
+  @GetMapping("/potager")
+  public List<Potager> getAllPotager() {
+    return manager.getAllPotager();
+  }
 }
