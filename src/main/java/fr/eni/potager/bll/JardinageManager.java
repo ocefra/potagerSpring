@@ -17,11 +17,13 @@ public interface JardinageManager <T extends Jardinable>{
   List<Carre> getAllCarre();
   List<Carre> getAllCarreOfPotager(Potager potager);
 
-  void addPlantation(Plantation plantation) throws JardinageException;
+//  void addPlantation(Plantation plantation) throws JardinageException;
   List<Plantation> getAllPlantation();
   List<Plantation> getAllPlantationOfCarre(Carre carre);
   void removePlantationFromCarre(Plante plante, Carre carre);
 
   void addAction(Action action) throws JardinageException;
   List<Action> getActionNextWeeks(Integer nWeeks);
+
+  void addPlantationToCarre(Plantation plantation, Carre carre) throws JardinageException;
 }

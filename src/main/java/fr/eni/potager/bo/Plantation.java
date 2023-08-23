@@ -1,5 +1,6 @@
 package fr.eni.potager.bo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -21,15 +22,15 @@ public class Plantation implements Jardinable {
     private Plante plante;
 
     @ManyToOne
+    @JsonIgnore
     private Carre carre;
 
     private Integer quantite;
     private LocalDate datePlantation;
     private LocalDate dateRecolte;
 
-    public Plantation(Plante plante, Carre carre, Integer quantite, LocalDate datePlantation, LocalDate dateRecolte) {
+    public Plantation(Plante plante, Integer quantite, LocalDate datePlantation, LocalDate dateRecolte) {
         this.plante = plante;
-        this.carre = carre;
         this.quantite = quantite;
         this.datePlantation = datePlantation;
         this.dateRecolte = dateRecolte;

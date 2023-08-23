@@ -105,10 +105,18 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
     return dao.carre.findAllCarreOfPotager(potager);
   }
 
-
+//  @Override
+//  @Transactional
+//  public void addPlantationToCarre(Plantation plantation, Carre carre) {
+//    carre.add(plantation);
+//    plantation.setCarre(carre);
+//    dao.plantation.save(plantation);
+//    dao.carre.save(carre);
+//  }
   @Override
-  public void addPlantation(Plantation plantation) throws JardinageException {
-    List<Plantation> plantationsDuCarre = getAllPlantationOfCarre(plantation.getCarre());
+  @Transactional
+  public void addPlantationToCarre(Plantation plantation, Carre carre) throws JardinageException {
+    List<Plantation> plantationsDuCarre = getAllPlantationOfCarre(carre);
 
     // === Contrainte max 3 plantes ===
     boolean max3ok = false;
@@ -125,7 +133,7 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
 
     // Si la première contrainte passe
     // === Contrainte surface ===
-    Double surfaceCarre = plantation.getCarre().getSurface();
+    Double surfaceCarre = carre.getSurface();
     Double surfacePlantation = plantation.calculateSurface();
 
     Double surfacePlantsExistants = 0.0;
@@ -134,7 +142,12 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
 
     Double surfaceRestante = surfaceCarre - surfacePlantsExistants;
     if (surfaceRestante >= surfacePlantation) {
+
+      carre.add(plantation);
+      plantation.setCarre(carre);
+      dao.carre.save(carre);
       dao.plantation.save(plantation);
+
     } else {
       throw new JardinageException(String.format(
               "La plantation (%.2f m2) est trop grande : il ne reste plus que %.2f m2.",
@@ -170,6 +183,13 @@ public class JardinageManagerImpl implements JardinageManager<Jardinable> {
         .filter(a -> a.getDate().isAfter(LocalDate.now()) && a.getDate().isBefore(LocalDate.now().plusWeeks(nWeeks)))
         .toList();
   }
+
+
+//  @Override
+//  @Transactional
+//  public void addPlantationToCarre(Carre carre, Plantation... plantationList) {
+//    carre.addAll(plantationList);
+//  }
 
   public void locatePlante(Plante plante) {
     StringBuilder sb = new StringBuilder();

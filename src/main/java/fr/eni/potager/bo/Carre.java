@@ -1,11 +1,13 @@
 package fr.eni.potager.bo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.Delegate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,6 +18,11 @@ public class Carre extends Actionable implements Jardinable {
 
   @ManyToOne
   private Potager potager;
+
+  @OneToMany(mappedBy = "carre")
+  @ToString.Exclude
+  @Delegate
+  private List<Plantation> plantationList = new ArrayList<>();
 
   public Carre(String nom, Double surface, Sol sol, Exposition exposition, Potager potager) {
     super(nom, surface);
